@@ -1,0 +1,55 @@
+{
+  "beforeTest": {
+    "URLOfWebsite": "https://www.demoblaze.com/"
+  },
+  "test01": {
+    "ListProductPhones": [
+      "Samsung galaxy s6",
+      "Nokia lumia 1520",
+      "Nexus 6",
+      "Samsung galaxy s7",
+      "Iphone 6 32gb",
+      "Sony xperia z5",
+      "HTC One M9"
+    ],
+    "ListProductLaptops": [
+      "Sony vaio i5",
+      "Sony vaio i7",
+      "MacBook air",
+      "Dell i7 8gb",
+      "2017 Dell 15.6 Inch",
+      "MacBook Pro"
+    ],
+    "ListProductMonitors": [
+      "Apple monitor 24",
+      "ASUS Full HD"
+    ]
+  },
+  "test02": {
+    "URLAfterClickingOnHomeButton": "https://www.demoblaze.com/index.html",
+    "TextPopUpAfterClickingOnContactButton": "New message",
+    "TextPopUpAfterClickingOnAboutUsButton": "About us",
+    "URLAfterClickingOnCartButton": "https://www.demoblaze.com/cart.html",
+    "TextPopUpAfterClickingOnLogInButton": "Log in",
+    "TextPopUpAfterClickingOnSignUpButton": "Sign up"
+  },
+  "test03": {
+    "EmailField": "shlome",
+    "NameField": "YONI",
+    "TextField": "test02",
+    "TextAlertMessage": "Thanks for the message!!"
+  },
+  "test04": {
+    "NameForInviteField": "moshe",
+    "CountryField": "us",
+    "CityField": "city",
+    "CardField": "1234",
+    "MonthField": "05",
+    "YearField": "01",
+    "cartAlert": "Product added"
+
+  },
+  "test05": {
+    "productToClick":["Apple monitor 24", "Nexus 6"]
+  }
+}
