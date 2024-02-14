@@ -38,7 +38,7 @@ public class JsonFile {
     }
 
     public javax.json.JsonArray dataArray(String test02, String value) {
-        File jsonInputFile = new File("C:\\java\\ProductStore_Automation\\demoblaze_store-main\\ProductStore\\src\\main\resources\\DataTests.json");
+        File jsonInputFile = new File("C:\\java\\ProductStore_Automation\\demoblaze_store-main\\ProductStore\\src\\main\\resources\\DataTests.json");
         Map<JsonObject, JsonArray> myMap = new HashMap<>();
         JsonObject addrObj = null;
         try (InputStream is = new FileInputStream(jsonInputFile)){
