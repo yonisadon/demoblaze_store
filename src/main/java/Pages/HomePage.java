@@ -1,14 +1,18 @@
 package Pages;
 
+import org.example.InitDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class HomePage {
+public class HomePage extends InitDriver {
+
     public HomePage(WebDriver driver) {
+        super(driver);
         PageFactory.initElements(driver, this);
     }
+
     //Buttons for filtering products
     @FindBy(xpath = "//div//a[@id='itemc'][text()='Phones']")
     public WebElement PhonesButton;

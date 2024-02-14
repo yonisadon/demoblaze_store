@@ -1,15 +1,19 @@
 
+import Business_Layer.Selenium;
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
-import static Business_Layer.Selenium.*;
-
 public class BaseSession {
+
+    protected WebDriver driver;
 
     @BeforeClass
     public void Init()  {
-        startSession();
-        initAll();
+        Selenium selenium = new Selenium(driver);
+        selenium.startSession();
+        selenium.initAll();
+        driver = selenium.getDriver();
     }
 
     @AfterClass

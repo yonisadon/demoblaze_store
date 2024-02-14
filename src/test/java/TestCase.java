@@ -9,7 +9,8 @@ public class TestCase extends BaseSession {
     @Description("Click the buttons and check if products exists")
     public void Test01() throws InterruptedException {
         try {
-            HomeFlow.start().CheckIfAllProductsExistInWebsite();
+            HomeFlow homeFlow = new HomeFlow(driver);
+            homeFlow.CheckIfAllProductsExistInWebsite();
             System.out.println("passed1");
         } catch (AssertionError failed) {
             fail("Test Failed! - See details..." + failed);
@@ -20,12 +21,13 @@ public class TestCase extends BaseSession {
     @Description("Click the button and Check if page or popup message is correct")
     public void Test02() throws InterruptedException {
         try {
-            HomeFlow.start().clickButton("HomeButton");
-            HomeFlow.start().clickButton("ContactButton");
-            HomeFlow.start().clickButton("AboutUsButton");
-            HomeFlow.start().clickButton("CartButton");
-            HomeFlow.start().clickButton("LogInButton");
-            HomeFlow.start().clickButton("SignUpButton");
+            HomeFlow homeFlow = new HomeFlow(driver);
+            homeFlow.clickButton("HomeButton");
+            homeFlow.clickButton("ContactButton");
+            homeFlow.clickButton("AboutUsButton");
+            homeFlow.clickButton("CartButton");
+            homeFlow.clickButton("LogInButton");
+            homeFlow.clickButton("SignUpButton");
             System.out.println("passed2");
         } catch (AssertionError failed) {
             fail("Test Failed! - See details..." + failed);
@@ -36,7 +38,8 @@ public class TestCase extends BaseSession {
     @Description("Click the button, filling fields and check massage alert")
     public void Test03() throws InterruptedException {
         try {
-            HomeFlow.start().clickAndFillingInTheFields();
+            HomeFlow homeFlow = new HomeFlow(driver);
+            homeFlow.clickAndFillingInTheFields();
             System.out.println("passed3");
         } catch (AssertionError failed) {
             fail("Test Failed! - See details..." + failed);
@@ -47,8 +50,10 @@ public class TestCase extends BaseSession {
     @Description("Start ordering a product, Making the order")
     public void Test04() throws InterruptedException {
         try {
-            HomeFlow.start().StartOrderingAProduct();
-            CartFlow.start().MakingTheOrder();
+            HomeFlow homeFlow = new HomeFlow(driver);
+            CartFlow cartFlow = new CartFlow(driver);
+            homeFlow.StartOrderingAProduct();
+            cartFlow.MakingTheOrder();
             System.out.println("passed4");
         } catch (AssertionError failed) {
             fail("Test Failed! - See details..." + failed);

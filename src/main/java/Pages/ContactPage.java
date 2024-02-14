@@ -1,13 +1,15 @@
 package Pages;
 
+import org.example.InitDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class ContactPage {
+public class ContactPage extends InitDriver {
 
-    public ContactPage(WebDriver driver){
+    public ContactPage(WebDriver driver) {
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 

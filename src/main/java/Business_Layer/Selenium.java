@@ -13,28 +13,38 @@ import org.testng.asserts.SoftAssert;
 
 public class Selenium {
 
-    public static WebDriver driver;
     public static WebDriverWait wait;
     public static SoftAssert softAssert;
+    private WebDriver driver;
 
-    public static void startSession() {
+    public Selenium(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
+    }
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void startSession() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         softAssert = new SoftAssert();
+        wait = new WebDriverWait(driver, 20);
         driver.manage().window().maximize();
         driver.get(JsonFile.start().data("beforeTest", "URLOfWebsite"));
     }
 
-    public static void initAll( ) {
+    public void initAll( ) {
         new HomePage(driver);
         new ContactPage(driver);
         new CartPage(driver);
-        //new Selenium();
     }
 
-    public static void clickMe(WebElement element)  {
+    public void clickMe(WebElement element)  {
         try {
-            wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.visibilityOfAllElements(element));
             element.click();
         } catch (AssertionError e) {
@@ -42,8 +52,7 @@ public class Selenium {
         }
     }
 
-    public static void SendKeyToField(WebElement element, String elementSendKey){
-        wait = new WebDriverWait(driver, 10);
+    public void SendKeyToField(WebElement element, String elementSendKey){
         element.sendKeys(elementSendKey);
     }
 }

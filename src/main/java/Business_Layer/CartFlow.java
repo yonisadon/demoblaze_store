@@ -2,10 +2,12 @@ package Business_Layer;
 
 import Pages.CartPage;
 import Pages.HomePage;
+import org.example.InitDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.json.JsonArray;
 import java.text.DecimalFormat;
@@ -13,14 +15,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import static Business_Layer.Selenium.*;
-import static Business_Layer.Selenium.softAssert;
 
-public class CartFlow {
 
-    public static CartFlow start() {
-        CartFlow cartFlow = new CartFlow();
-        return cartFlow;
+public class CartFlow extends InitDriver {
+
+    public CartFlow(WebDriver driver) {
+        super(driver);
+        PageFactory.initElements(driver, this);
     }
 
     List<String> orderedProducts = new ArrayList<>();
@@ -30,14 +31,13 @@ public class CartFlow {
     String totalPriceFormatted;
 
     public void MakingTheOrder() throws InterruptedException {
-        CartPage cartPage = new CartPage(driver);
-        HomePage homePage = new HomePage(driver);
-        wait = new WebDriverWait(driver, 20);
+        CartPage cartPage = new CartPage(selenium.getDriver());
+        HomePage homePage = new HomePage(selenium.getDriver());
         clickMe(homePage.CartButton);
         wait.until(ExpectedConditions.urlToBe(JsonFile.start().data("test02", "URLAfterClickingOnCartButton")));
         productToClickArray = JsonFile.start().dataArray("test05", "productToClick");
         Thread.sleep(2000);
-        List<WebElement> cartItems = driver.findElements(By.xpath("//*[@id='tbodyid']/tr"));
+        List<WebElement> cartItems = selenium.getDriver().findElements(By.xpath("//*[@id='tbodyid']/tr"));
         for (WebElement item : cartItems) {
             productsInCart.add(item.findElement(By.xpath("./td[2]")).getText().trim());
             pricesInCart.add(item.findElement(By.xpath("./td[3]")).getText().trim());
