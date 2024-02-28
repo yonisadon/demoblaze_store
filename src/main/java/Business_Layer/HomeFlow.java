@@ -13,11 +13,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 import java.util.Iterator;
 import javax.json.JsonArray;
 import java.util.*;
 
 public class HomeFlow extends InitDriver {
+
+    HomePage homePage;
+    CartPage cartPage;
+    ContactPage contactPage;
 
     public HomeFlow(WebDriver driver) {
         super(driver);
@@ -26,7 +32,7 @@ public class HomeFlow extends InitDriver {
 
     @Step("Click the button")
     public void clickButton(String buttonName) throws InterruptedException {
-        HomePage homePage = new HomePage(selenium.getDriver());
+        homePage = new HomePage(selenium.getDriver());
         switch (buttonName) {
             case "HomeButton":
                 clickAndWait(homePage.HomeButton, null, wait, JsonFile.start().data("test02", "URLAfterClickingOnHomeButton"));
@@ -67,9 +73,9 @@ public class HomeFlow extends InitDriver {
 
     @Step("Click the button, filling fields and check massage alert")
     public void clickAndFillingInTheFields() throws InterruptedException {
-        HomePage homePage = new HomePage(selenium.getDriver());
-        ContactPage contactPage  = new ContactPage(selenium.getDriver());
-        wait = new WebDriverWait(selenium.getDriver(), 10);
+        homePage = new HomePage(selenium.getDriver());
+        contactPage  = new ContactPage(selenium.getDriver());
+        wait = new WebDriverWait(selenium.getDriver(), Duration.ofSeconds(20));
         clickMe(homePage.ContactButton);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div//h5[@id='exampleModalLabel']")));
         SendKeyToField(contactPage.EmailFiled, JsonFile.start().data("test03", "EmailField"));
@@ -92,7 +98,7 @@ public class HomeFlow extends InitDriver {
     }
 
     public void CheckIfAllProductsExistInWebsite() throws InterruptedException {
-        HomePage homePage = new HomePage(selenium.getDriver());
+        homePage = new HomePage(selenium.getDriver());
         List<WebElement> buttons = new ArrayList<>();
         buttons.add(homePage.PhonesButton);
         buttons.add(homePage.LaptopsButton);
@@ -101,7 +107,6 @@ public class HomeFlow extends InitDriver {
         buttonToExpectedProducts.put(homePage.PhonesButton, Arrays.asList(JsonFile.start().dataArray("test01", "ListProductPhones")));
         buttonToExpectedProducts.put(homePage.LaptopsButton, Arrays.asList(JsonFile.start().dataArray("test01", "ListProductLaptops")));
         buttonToExpectedProducts.put(homePage.MonitorsButton, Arrays.asList(JsonFile.start().dataArray("test01", "ListProductMonitors")));
-
         for (WebElement button : buttons) {
             clickMe(button);
             Thread.sleep(3000);
@@ -129,8 +134,8 @@ public class HomeFlow extends InitDriver {
     public static JsonArray productToClickArray = JsonFile.start().dataArray("test05", "productToClick");
 
     public void StartOrderingAProduct() throws InterruptedException {
-        HomePage homePage = new HomePage(selenium.getDriver());
-        CartPage cartPage = new CartPage(selenium.getDriver());
+        homePage = new HomePage(selenium.getDriver());
+        cartPage = new CartPage(selenium.getDriver());
         boolean allProductsSelected = false;
         for (int runOnTheProdutsIWantToOrder = 0; runOnTheProdutsIWantToOrder < productToClickArray.size(); runOnTheProdutsIWantToOrder++) {
             String productToClick = productToClickArray.getString(runOnTheProdutsIWantToOrder);
@@ -148,7 +153,7 @@ public class HomeFlow extends InitDriver {
                         if (productElement.getText().contains(productToClick)) {
                             productInCart.add(productElement);
                             clickMe(productElement);
-                            Thread.sleep(5000);
+                            //Thread.sleep(5000);
                             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div//a[text()='Add to cart']")));
                             clickMe(cartPage.AddToCartButton);
                             try {
@@ -175,7 +180,7 @@ public class HomeFlow extends InitDriver {
     }
 
     public List<WebElement> ListInWebElements() {
-        WebDriverWait wait = new WebDriverWait(selenium.getDriver(), 20);
+        WebDriverWait wait = new WebDriverWait(selenium.getDriver(), Duration.ofSeconds(20));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.col-lg-4.col-md-6.mb-4")));
         WebElement parentElement = selenium.getDriver().findElement(By.id("tbodyid"));
         return parentElement.findElements(By.xpath("//div[@class='col-lg-4 col-md-6 mb-4']"));

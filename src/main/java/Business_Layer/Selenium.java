@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
+import java.time.Duration;
+
 public class Selenium {
 
     public static WebDriverWait wait;
@@ -29,10 +31,11 @@ public class Selenium {
     }
 
     public void startSession() {
+        //WebDriverManager.chromedriver().browserVersion("122.0.6261.70").setup();
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         softAssert = new SoftAssert();
-        wait = new WebDriverWait(driver, 20);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         driver.manage().window().maximize();
         driver.get(JsonFile.start().data("beforeTest", "URLOfWebsite"));
     }
