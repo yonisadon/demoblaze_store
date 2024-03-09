@@ -37,4 +37,6 @@ public class CartPage extends InitDriver {
     public WebElement OkButtonAfterFillingTheFields;
     @FindBy(xpath = "//*[@id='orderModal']/div/div/div[3]/button[1]")
     public WebElement CloseButtonAfterClickingOk;
+    @FindBy(id = "totalp")
+    public WebElement TotalPriceInTheCartPage;
 }

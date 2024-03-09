@@ -97,7 +97,7 @@ public class HomeFlow extends InitDriver {
         softAssert.assertAll();
     }
 
-    public void CheckIfAllProductsExistInWebsite() throws InterruptedException {
+    public void AllProductsExistInWebsite() throws InterruptedException {
         homePage = new HomePage(selenium.getDriver());
         List<WebElement> buttons = new ArrayList<>();
         buttons.add(homePage.PhonesButton);

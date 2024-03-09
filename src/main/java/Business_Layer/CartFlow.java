@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static Business_Layer.HomeFlow.productToClickArray;
@@ -45,7 +46,6 @@ public class CartFlow extends InitDriver {
         homePage = new HomePage(selenium.getDriver());
         clickMe(homePage.CartButton);
         wait.until(ExpectedConditions.urlToBe(JsonFile.start().data("test02", "URLAfterClickingOnCartButton")));
-        //System.out.println(productToClickArray);
         Thread.sleep(2000);
         checkIfProductsAndThePricesOfTheProductsExistsInMyCart();
         for (int runnningOnTheProdutsIOrdered = 0; runnningOnTheProdutsIOrdered < productToClickArray.size(); runnningOnTheProdutsIOrdered++) {
@@ -55,12 +55,13 @@ public class CartFlow extends InitDriver {
         for (String orderedProduct : orderedProducts) {
             softAssert.assertTrue(productsInCart.contains(orderedProduct), "Product '" + orderedProduct + "' not found in the cart");
         }
-        double totalPrice = 0;
-        for (String price : pricesInCart) {
-            totalPrice += Double.parseDouble(price.replaceAll("[^0-9.]", ""));
-            DecimalFormat decimalFormat = new DecimalFormat("#");
-            totalPriceFormatted = decimalFormat.format(totalPrice);
-        }
+        //softAssert.assertTrue(totalPriceFormatted.equals(cartPage.TotalPriceInTheCartPage.getText()));
+//        double totalPrice = 0;
+//        for (String price : pricesInCart) {
+//            totalPrice += Double.parseDouble(price.replaceAll("[^0-9.]", ""));
+//            DecimalFormat decimalFormat = new DecimalFormat("#");
+//            totalPriceFormatted = decimalFormat.format(totalPrice);
+//        }
     }
 
     public void FillingInDetailsInTheOrder() throws InterruptedException {
@@ -76,7 +77,7 @@ public class CartFlow extends InitDriver {
         SendKeyToField(cartPage.YearField, JsonFile.start().data("test04", "YearField"));
         clickMe(cartPage.PurchaseButton);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[@class='lead text-muted ']")));
-        String fields[] = cartPage.AlertPurchase.getText().split("\n");
+        String[] fields = cartPage.AlertPurchase.getText().split("\n");
         for (String field : fields) {
             String[] parts = field.split(":");
             boolean finishToFields = false;
@@ -88,7 +89,7 @@ public class CartFlow extends InitDriver {
                         System.out.println("Id: " + value);
                         break;
                     case "Amount":
-                        String amount[] = value.split(" USD");
+                        String[] amount = value.split(" USD");
                         softAssert.assertEquals(totalPriceFormatted, amount[0]);
                         break;
                     case "Card Number":
@@ -110,7 +111,6 @@ public class CartFlow extends InitDriver {
                 clickMe(cartPage.OkButtonAfterFillingTheFields);
             }
             softAssert.assertAll();
-
         }
     }
 
@@ -129,19 +129,27 @@ public class CartFlow extends InitDriver {
         return formattedDate;
     }
 
-    public void deleteProductInTheCartPage() throws InterruptedException {
+    public void deleteDesiredProductsInCart() throws InterruptedException {
         readDesiredProductsFromJsonArray(jsonArray);
-        for (String desiredProduct : desiredProducts) {
-            //System.out.println(desiredProduct);
+        Iterator<String> iterator = desiredProducts.iterator();
+        while (iterator.hasNext()) {
+            String desiredProduct = iterator.next();
             for (String productInCart : productsInCart) {
-                //System.out.println(productInCart);
                 if (productInCart.contains(desiredProduct)) {
+                    Thread.sleep(3000);
                     WebElement DeleteProductInCart = selenium.getDriver().findElement(By.xpath("//*[@id='tbodyid']//td[contains(text(),'"+productInCart+"')]/following-sibling::td/a[text()='Delete']"));
                     clickMe(DeleteProductInCart);
+                    iterator.remove();
                     Thread.sleep(2000);
+                    break;
                 }
             }
         }
+        pricesInCart.clear();
+        checkIfProductsAndThePricesOfTheProductsExistsInMyCart();
+        softAssert.assertTrue( desiredProducts.size() == 0,"Expected desired products list size to be 0, but found " + desiredProducts.size() + " products.");
+        softAssert.assertTrue(totalPriceFormatted.equals(cartPage.TotalPriceInTheCartPage.getText()));
+        softAssert.assertAll();
     }
 
     private void readDesiredProductsFromJsonArray(JsonArray jsonArray) {
@@ -155,12 +163,26 @@ public class CartFlow extends InitDriver {
         }
     }
 
-    public void checkIfProductsAndThePricesOfTheProductsExistsInMyCart()  {
+    public void checkIfProductsAndThePricesOfTheProductsExistsInMyCart() throws InterruptedException {
         homePage = new HomePage(selenium.getDriver());
+        cartPage = new CartPage(selenium.getDriver());
+        System.out.println(selenium.getDriver().getCurrentUrl());
+        if (!selenium.getDriver().getCurrentUrl().equals("https://www.demoblaze.com/cart.html#")){
+            clickMe(homePage.CartButton);
+            System.out.println(selenium.getDriver().getCurrentUrl());
+            //Thread.sleep(3000);
+            wait.until(ExpectedConditions.urlToBe(JsonFile.start().data("test02", "URLAfterClickingOnCartButton")));
+        }
         List<WebElement> cartItems = selenium.getDriver().findElements(By.xpath("//*[@id='tbodyid']/tr"));
         for (WebElement item : cartItems) {
             productsInCart.add(item.findElement(By.xpath("./td[2]")).getText().trim());
             pricesInCart.add(item.findElement(By.xpath("./td[3]")).getText().trim());
+        }
+        double totalPrice = 0;
+        for (String price : pricesInCart) {
+            totalPrice += Double.parseDouble(price.replaceAll("[^0-9.]", ""));
+            DecimalFormat decimalFormat = new DecimalFormat("#");
+            totalPriceFormatted = decimalFormat.format(totalPrice);
         }
     }
 }
@@ -203,7 +225,38 @@ public class CartFlow extends InitDriver {
 
 
 
+ /*  public void deleteProductInTheCartPage() throws InterruptedException {
+        Thread.sleep(3000);
+        readDesiredProductsFromJsonArray(jsonArray);
+//        for (String desiredProduct : desiredProducts) {
+//            //System.out.println(desiredProduct);
+//            for (String productInCart : productsInCart) {
 
+        Iterator<String> iterator = desiredProducts.iterator();
+        while (iterator.hasNext()) {
+            String desiredProduct = iterator.next();
+            //boolean foundAndDeleted = false;
+            for (String productInCart : productsInCart) {
+                if (productInCart.contains(desiredProduct)) {
+                    Thread.sleep(3000);
+                    WebElement DeleteProductInCart = selenium.getDriver().findElement(By.xpath("//*[@id='tbodyid']//td[contains(text(),'"+productInCart+"')]/following-sibling::td/a[text()='Delete']"));
+                    clickMe(DeleteProductInCart);
+                    System.out.println(desiredProduct);
+                    //foundAndDeleted = true;
+                    iterator.remove();
+
+                    System.out.println(desiredProducts);
+                    System.out.println(desiredProducts.size());
+                    Thread.sleep(2000);
+                    break;
+                }
+            }
+        }
+        pricesInCart.clear();
+        checkIfProductsAndThePricesOfTheProductsExistsInMyCart();
+        Assert.assertTrue("Expected desired products list size to be 0, but found " + desiredProducts.size() + " products.", desiredProducts.size() == 0);
+    }
+*/
 
 
 

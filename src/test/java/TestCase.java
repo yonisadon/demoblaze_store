@@ -2,6 +2,8 @@ import Business_Layer.CartFlow;
 import Business_Layer.HomeFlow;
 import io.qameta.allure.Description;
 import org.testng.annotations.Test;
+
+import static Business_Layer.Selenium.softAssert;
 import static org.testng.FileAssert.fail;
 public class TestCase extends BaseSession {
 
@@ -9,10 +11,10 @@ public class TestCase extends BaseSession {
     CartFlow cartFlow;
     @Test(priority = 1)
     @Description("Click the buttons and check if products exists")
-    public void Test01() throws InterruptedException {
+    public void CheckIfAllProductsExistInWebsite() throws InterruptedException {
         try {
             homeFlow = new HomeFlow(driver);
-            homeFlow.CheckIfAllProductsExistInWebsite();
+            homeFlow.AllProductsExistInWebsite();
             System.out.println("passed1");
         } catch (AssertionError failed) {
             fail("Test Failed! - See details..." + failed);
@@ -21,7 +23,7 @@ public class TestCase extends BaseSession {
 
     @Test(priority = 2)
     @Description("Click the button and Check if page or popup message is correct")
-    public void Test02() throws InterruptedException {
+    public void CheckTheTransitionBetweenTheButtonAndThePageOrPopUpPanel() throws InterruptedException {
         try {
             homeFlow = new HomeFlow(driver);
             homeFlow.clickButton("HomeButton");
@@ -38,7 +40,7 @@ public class TestCase extends BaseSession {
 
     @Test(priority = 3)
     @Description("Click the button, filling fields and check massage alert")
-    public void Test03() throws InterruptedException {
+    public void FillingPopUpPanelAndSendMassage() throws InterruptedException {
         try {
             homeFlow = new HomeFlow(driver);
             homeFlow.clickAndFillingInTheFields();
@@ -50,7 +52,7 @@ public class TestCase extends BaseSession {
 
     @Test(priority = 4)
     @Description("Start ordering a product, Making the order")
-    public void Test04() throws InterruptedException {
+    public void OrderingProductsAndCheckingTheDataInTheCart() throws InterruptedException {
         try {
             homeFlow = new HomeFlow(driver);
             cartFlow = new CartFlow(driver);
@@ -63,14 +65,14 @@ public class TestCase extends BaseSession {
         }
     }
     @Test(priority = 5)
-    @Description("Start ordering a product, Making the order")
-    public void Test05() throws InterruptedException {
+    @Description("Ordering products deleting the requested products and checking the data in the cart")
+    public void OrderingProductsDeletingTheRequestedProductsAndCheckingTheDataInTheCart() throws InterruptedException {
         try {
             homeFlow = new HomeFlow(driver);
             cartFlow = new CartFlow(driver);
             homeFlow.StartOrderingAProduct();
-            cartFlow.MakingTheOrder();
-            cartFlow.deleteProductInTheCartPage();
+            cartFlow.checkIfProductsAndThePricesOfTheProductsExistsInMyCart();
+            cartFlow.deleteDesiredProductsInCart();
             System.out.println("passed5");
         } catch (AssertionError failed) {
             fail("Test Failed! - See details..." + failed);

@@ -47,10 +47,9 @@
     "MonthField": "05",
     "YearField": "01",
     "cartAlert": "Product added"
-
   },
   "test05": {
-    "productToClick":["Samsung galaxy s6", "Apple monitor 24", "Nexus 6"]
+    "productToClick":["Samsung galaxy s6", "Apple monitor 24", "Nexus 6", "Nexus 6"]
   },
   "test06": {
     "productDelete": ["Apple monitor 24", "Nexus 6"]
